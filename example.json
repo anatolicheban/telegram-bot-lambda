@@ -1,0 +1,21 @@
+{
+  "dt": 1667379600,
+  "main": {
+    "temp": 11.33,
+    "feels_like": 9.46,
+    "temp_min": 11.33,
+    "temp_max": 11.33,
+    "pressure": 1017,
+    "sea_level": 1017,
+    "grnd_level": 1000,
+    "humidity": 36,
+    "temp_kf": 0
+  },
+  "weather": [{ "id": 803, "main": "Clouds", "description": "broken clouds", "icon": "04d" }],
+  "clouds": { "all": 80 },
+  "wind": { "speed": 4.1, "deg": 227, "gust": 5.8 },
+  "visibility": 10000,
+  "pop": 0,
+  "sys": { "pod": "d" },
+  "dt_txt": "2022-11-02 09:00:00"
+}
