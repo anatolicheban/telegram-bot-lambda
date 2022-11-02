@@ -43,3 +43,16 @@ export const intervals = [
     }
   ]
 ]
+
+export const currencies = [
+  [
+    {
+      text: 'USD',
+      callback_data: 'USD'
+    },
+    {
+      text: 'EUR',
+      callback_data: 'EUR'
+    }
+  ]
+]

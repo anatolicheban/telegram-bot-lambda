@@ -1,11 +1,11 @@
 import axios from 'axios'
 import chalk from 'chalk'
 import TelegramBot from 'node-telegram-bot-api'
-import { intervals, locations } from './buttons-lists.js'
+import { currencies, intervals, locations } from './buttons-lists.js'
 import { messageTemplate } from './message-template.js'
 
-const token = '5668603977:AAEaIz77mTUaOdlVq-gH99i9p0rDITLpdKw'
-const bot = new TelegramBot(token, { polling: true })
+const token = '5668603977:AAHGbd68mEn9NyBXfXOMjksQoAIbDdyNqPM'
+const bot = new TelegramBot(token, { polling: true, })
 
 const weatherApiKey = '21b33fd780b898195cf7d24b7be50c85'
 
@@ -32,7 +32,7 @@ bot.on('message', msg => {
     bot.sendMessage(msg.from.id, "Select location from list", {
       reply_markup: {
         inline_keyboard: locations
-      }
+      },
     })
   }
 })
@@ -42,7 +42,6 @@ bot.on('message', msg => {
 bot.on('callback_query', query => {
   if (locationsList.includes(query.data)) {
     weatherQuery.location = query.data
-
     bot.sendMessage(query.message.chat.id, 'Select Interval', {
       reply_markup: {
         inline_keyboard: intervals
@@ -78,3 +77,36 @@ bot.on('callback_query', async query => {
   }
 })
 
+//Работа над курсом валют
+bot.on('message', async info => {
+  if (info.text === '/getcourse') {
+    bot.sendMessage(info.from.id, 'Choose currency', {
+      reply_markup: {
+        inline_keyboard: currencies
+      }
+    })
+
+  }
+})
+
+
+//Ловим необходимую валюту
+bot.on('callback_query', async query => {
+  if (query.data === 'USD') {
+    sendCurrency(query.data, query.message.chat.id)
+  } else if (query.data === 'EUR') {
+    sendCurrency(query.data, query.message.chat.id)
+  }
+})
+
+const sendCurrency = (curr, userId) => {
+  bot.sendMessage(userId, 'Please wait...')
+  axios.get('https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11')
+    .then(res => res.data)
+    .then(res => {
+      let currency = res.find(item => item.ccy === curr)
+
+      bot.sendMessage(userId, `
+        Currency: ${' ' + currency.ccy}\nBuy: ${' ' + currency.buy + ' UAH'}\nSale: ${' ' + currency.sale + ' UAH'}`)
+    })
+}
